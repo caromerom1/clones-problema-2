@@ -38,26 +38,6 @@ public class Usuario {
         this.pedidos = pedidos;
     }
 
-    public void generarReporte() {
-        int total = calcularTotal();
-        System.out.println("------------------------");
-        System.out.println("El total de compras para " + nombre + " es: " + total);
-        ArrayList<Pedido> pedidosOrdenados = ordenarPedidosPorPrecio();
-        for (Pedido pedido : pedidosOrdenados) {
-            pedido.generarReporte();
-        }
-    }
-
-    private int calcularTotal() {
-        int total = 0;
-        for (Pedido pedido : pedidos) {
-            for (Producto producto : pedido.getProductos()) {
-                total += producto.getPrecio();
-            }
-        }
-        return total;
-    }
-
     public ArrayList<Pedido> ordenarPedidosPorPrecio() {
         ArrayList<Pedido> pedidosOrdenados = new ArrayList<>();
         for (Pedido pedido : pedidos) {

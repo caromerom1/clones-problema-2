@@ -6,40 +6,23 @@ import java.util.Collections;
 public class Restaurante {
     private ArrayList<Producto> productos;
     private ArrayList<Pedido> pedidos;
-    private ArrayList<Usuario> usuarios;
+    private Reporte reporte = new Reporte();
 
     public Restaurante(ArrayList<Producto> productos, ArrayList<Pedido> pedidos, ArrayList<Usuario> usuarios) {
         this.productos = productos;
         this.pedidos = pedidos;
-        this.usuarios = usuarios;
     }
 
     public ArrayList<Producto> getProductos() {
         return productos;
     }
 
+    public ArrayList<Pedido> getPedidos() {
+        return pedidos;
+    }
+
     public void setProductos(ArrayList<Producto> productos) {
         this.productos = productos;
-    }
-
-    public void generarReporte() {
-        int total = calcularTotal();
-        System.out.println("------------------------");
-        System.out.println("El total de ventas para el restaurante es: " + total);
-        ArrayList<Pedido> pedidosOrdenados = this.pedidosPorPrecio();
-        for (Pedido pedido : pedidosOrdenados) {
-            pedido.generarReporte();
-        }
-    }
-
-    private int calcularTotal() {
-        int total = 0;
-        for (Pedido pedido : pedidos) {
-            for (Producto producto : pedido.getProductos()) {
-                total += producto.getPrecio();
-            }
-        }
-        return total;
     }
 
     public ArrayList<Pedido> pedidosPorPrecio() {
@@ -74,27 +57,28 @@ public class Restaurante {
         return merge(izquierda, derecha);
     }
 
+    private void updateResultado(ArrayList<Pedido> resultado, ArrayList<Pedido> pedidos, int i) {
+        resultado.add(pedidos.get(i));
+        pedidos.remove(i);
+    }
+
     private ArrayList<Pedido> merge(ArrayList<Pedido> izquierda, ArrayList<Pedido> derecha) {
         ArrayList<Pedido> resultado = new ArrayList<>();
 
         while (izquierda.size() > 0 && derecha.size() > 0) {
             if (izquierda.get(0).calcularTotal() < derecha.get(0).calcularTotal()) {
-                resultado.add(izquierda.get(0));
-                izquierda.remove(0);
+                this.updateResultado(resultado, izquierda, 0);
             } else {
-                resultado.add(derecha.get(0));
-                derecha.remove(0);
+                this.updateResultado(resultado, derecha, 0);
             }
         }
 
         while (izquierda.size() > 0) {
-            resultado.add(izquierda.get(0));
-            izquierda.remove(0);
+            this.updateResultado(resultado, izquierda, 0);
         }
 
         while (derecha.size() > 0) {
-            resultado.add(derecha.get(0));
-            derecha.remove(0);
+            this.updateResultado(resultado, derecha, 0);
         }
 
         return resultado;
@@ -141,8 +125,7 @@ public class Restaurante {
 
         Restaurante restaurante = new Restaurante(productos, pedidos, usuarios);
 
-        restaurante.generarReporte();
-        usuarios.get(0).generarReporte();
-        usuarios.get(1).generarReporte();
+        restaurante.reporte.generarReporte(restaurante);
+        restaurante.reporte.generarReporte(usuarios.get(1));
     }
 }

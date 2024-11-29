@@ -34,14 +34,4 @@ public class Pedido {
         }
         return total;
     }
-
-    public void generarReporte() {
-        System.out.println("------------------------");
-        System.out.println("Pedido de " + cliente.getNombre());
-        System.out.println("Productos:");
-        for (Producto producto : productos) {
-            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
-        }
-        System.out.println("Total: " + calcularTotal());
-    }
 }
